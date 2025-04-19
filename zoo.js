@@ -8,10 +8,16 @@ class Animal {
     return `${this.name} hangot ad ki.`;
   }
 
+  
   render() {
     const p = document.createElement("p");
     p.innerText = this.speak();
+    p.style.cursor = "pointer"; // Kattinthatóság jelzése
+    p.addEventListener("click", () => alert(`${this.name} meg lett kattintva!`));
     document.body.appendChild(p);
+
+    const container = document.getElementById("main");
+    container.appendChild(p);
   }
 }
 

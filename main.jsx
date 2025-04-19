@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import MemoryGame from "./MemoryGame";
-import RPSGame from "./RPSGame";
+import MemoryGame from "./MemoryGame.jsx";
+import RPSGame from "./RPSGame.jsx";
 
 function App() {
   const [page, setPage] = useState("menu");
