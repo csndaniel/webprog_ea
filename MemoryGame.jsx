@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 
-const images = ["apple", "banana", "grape"];
+const images = ["apple.png", "banana.png", "grape.png"];
 const cards = [...images, ...images].sort(() => Math.random() - 0.5);
 
 function MemoryGame({ onBack }) {
