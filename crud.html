@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feladatok</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen flex flex-col">
+    <main class="flex-1 p-4">
+        <!-- Oldal címe háttérképpel -->
+        <div class="header-image text-center text-white py-5">
+            <h1 class="display-6">Web-programozás-1 Előadás Házi feladat</h1>
+        </div>
+
+        <!-- Fixált navigáció -->
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
+            <div class="container">
+                <div class="navbar-nav w-100 d-flex justify-content-around">
+                    <a class="nav-link" href="index.html">Főoldal</a>
+                    <a class="nav-link" href="html5.html">HTML5</a>
+                    <a class="nav-link active" href="crud.html">Táblázat</a>
+                    <a class="nav-link" href="chartjs.html">ChartJS</a>
+                    <a class="nav-link" href="ajax.html">AJAX</a>
+                    <a class="nav-link" href="react.html">React</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="p-4 max-w-6xl mx-auto">
+
+            <!-- Űrlap új adathoz -->
+            <form id="crudForm" class="flex flex-wrap gap-4 mb-4">
+                <input type="text" id="name" placeholder="Név" class="border p-2 rounded w-48" required minlength="2"
+                    maxlength="20">
+                <input type="number" id="age" placeholder="Kor" class="border p-2 rounded w-24" required min="0"
+                    max="120">
+                <input type="email" id="email" placeholder="Email" class="border p-2 rounded w-64" required>
+                <input type="text" id="city" placeholder="Város" class="border p-2 rounded w-48" required minlength="2"
+                    maxlength="30">
+                <button type="submit" class="bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Hozzáadás</button>
+            </form>
+
+            <!-- Keresés -->
+            <input type="text" id="searchInput" placeholder="Keresés..." class="border p-2 rounded w-full mb-4">
+
+            <!-- Táblázat -->
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border p-2 cursor-pointer" onclick="sortTable(0)">Név</th>
+                            <th class="border p-2 cursor-pointer" onclick="sortTable(1)">Kor</th>
+                            <th class="border p-2 cursor-pointer" onclick="sortTable(2)">Email</th>
+                            <th class="border p-2 cursor-pointer" onclick="sortTable(3)">Város</th>
+                            <th class="border p-2">Műveletek</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crudTable">
+                        <!-- Dinamikus adatok ide jönnek -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            let data = [];
+
+            document.getElementById('crudForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const age = document.getElementById('age').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const city = document.getElementById('city').value.trim();
+
+                if (name.length < 2 || name.length > 20 || city.length < 2 || city.length > 30) {
+                    alert("Név vagy város hossza nem megfelelő!");
+                    return;
+                }
+
+                data.push({ name, age, email, city });
+                renderTable();
+                this.reset();
+            });
+
+            function renderTable() {
+                const tbody = document.getElementById('crudTable');
+                tbody.innerHTML = '';
+                const search = document.getElementById('searchInput').value.toLowerCase();
+
+                data.forEach((item, index) => {
+                    if (Object.values(item).some(val => val.toString().toLowerCase().includes(search))) {
+                        const row = `<tr>
+          <td class="border p-2">${item.name}</td>
+          <td class="border p-2">${item.age}</td>
+          <td class="border p-2">${item.email}</td>
+          <td class="border p-2">${item.city}</td>
+          <td class="border p-2 flex gap-2">
+            <button onclick="editEntry(${index})" class="bg-yellow-400 p-1 rounded">Szerk</button>
+            <button onclick="deleteEntry(${index})" class="bg-red-400 p-1 rounded">Törlés</button>
+          </td>
+        </tr>`;
+                        tbody.innerHTML += row;
+                    }
+                });
+            }
+
+            function deleteEntry(index) {
+                if (confirm("Biztosan törlöd?")) {
+                    data.splice(index, 1);
+                    renderTable();
+                }
+            }
+
+            function editEntry(index) {
+                const item = data[index];
+                document.getElementById('name').value = item.name;
+                document.getElementById('age').value = item.age;
+                document.getElementById('email').value = item.email;
+                document.getElementById('city').value = item.city;
+                deleteEntry(index);
+            }
+
+            document.getElementById('searchInput').addEventListener('input', renderTable);
+
+            let sortAsc = true;
+            function sortTable(columnIndex) {
+                const keys = ['name', 'age', 'email', 'city'];
+                data.sort((a, b) => {
+                    if (a[keys[columnIndex]] < b[keys[columnIndex]]) return sortAsc ? -1 : 1;
+                    if (a[keys[columnIndex]] > b[keys[columnIndex]]) return sortAsc ? 1 : -1;
+                    return 0;
+                });
+                sortAsc = !sortAsc;
+                renderTable();
+            }
+        </script>
+
+        <aside class="container my-4">
+            <div class="p-3 bg-light border rounded">
+                <h5>CRUD táblázat</h5>
+                <p>Bekérhető adatok, melyeket az oldal egy adatbázis szerű táblázatba elment.</p>
+            </div>
+        </aside>
+    </main>
+    <!-- Footer -->
+    <footer class="text-center py-4 footer-bg">
+        <h6>Cs. Nagy Dániel - FN25MA | Farkas Bence - NEPTUN</h6>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

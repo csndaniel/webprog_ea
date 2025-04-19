@@ -1,0 +1,73 @@
+.header-image {
+    background-image: url('kepek/hatter.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+h1 {
+    font-weight: bold;
+    /* Félkövér */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Szövegárnyék */
+    font-size: 24px;
+    /* Kérés szerint */
+}
+
+/* Navbar szín és hasábok */
+.custom-navbar {
+    background-color: #1e1e1e;
+}
+
+.custom-navbar .nav-link {
+    color: white;
+    padding: 15px 20px;
+    border-left: 1px solid white;
+    transition: transform 0.3s;
+}
+
+.custom-navbar .nav-link:first-child {
+    border-left: none;
+}
+
+.custom-navbar .nav-link:hover {
+    transform: translateY(-3px);
+    background-color: #2f2f2f;
+}
+
+/* Aktív oldal stílusa */
+.custom-navbar .nav-link.active {
+    font-weight: bold;
+    background-color: #2f2f2f;
+}
+
+/* Footer szín */
+.footer-bg {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* Justify szöveg */
+.text-justify {
+    text-align: justify;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #fbfbfb;
+}
+
+main {
+    flex: 1;
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+  }
+
+  .selected-row {
+    background-color: #cce5ff !important;
+  }

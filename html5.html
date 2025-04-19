@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feladatok</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <main class="flex-1 p-4">
+    <!-- Oldal címe háttérképpel -->
+    <div class="header-image text-center text-white py-5">
+      <h1 class="display-6">Web-programozás-1 Előadás Házi feladat</h1>
+    </div>
+
+    <!-- Fixált navigáció -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar sticky-top">
+      <div class="container">
+        <div class="navbar-nav w-100 d-flex justify-content-around">
+          <a class="nav-link" href="index.html">Főoldal</a>
+          <a class="nav-link active" href="html5.html">HTML5</a>
+          <a class="nav-link" href="crud.html">Táblázat</a>
+          <a class="nav-link" href="chartjs.html">ChartJS</a>
+          <a class="nav-link" href="ajax.html">AJAX</a>
+          <a class="nav-link" href="react.html">React</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="p-4 max-w-6xl mx-auto flex flex-col gap-8">
+
+
+
+      <!-- Web Storage példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Web Storage (localStorage)</h2>
+        <input type="text" id="storageInput" placeholder="Írj valamit..." class="border p-2 rounded w-full mb-2">
+        <button onclick="saveStorage()" class="bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Mentés</button>
+        <button onclick="loadStorage()"
+          class="bg-green-500 text-black p-2 rounded hover:bg-green-600 mt-2">Betöltés</button>
+        <p id="storageOutput" class="mt-2"></p>
+      </div>
+
+      <!-- Web Worker példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Web Worker</h2>
+        <button onclick="startWorker()" class="bg-purple-500 text-black p-2 rounded hover:bg-purple-600">Worker
+          indítása</button>
+        <p id="workerOutput" class="mt-2"></p>
+      </div>
+
+      <!-- Server-Sent Events példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Server-Sent Events (SSE)</h2>
+        <p class="text-gray-600 mb-2">(Ehhez igazi szerver kéne, most csak bemutató)</p>
+        <p><em>SSE nem fut sima fájl megnyitásból (file://), csak szerveren!</em></p>
+      </div>
+
+      <!-- Geolocation API példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Geolocation API</h2>
+        <button onclick="getLocation()" class="bg-indigo-500 text-black p-2 rounded hover:bg-indigo-600">Pozíció
+          lekérdezése</button>
+        <p id="geoOutput" class="mt-2"></p>
+      </div>
+
+      <!-- Drag and Drop API példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Drag and Drop API</h2>
+        <div id="dragItem" draggable="true" class="w-24 h-24 bg-blue-300 flex items-center justify-center rounded mb-4">
+          Húzza el!</div>
+        <div id="dropZone" class="w-48 h-48 border-2 border-dashed border-gray-400 flex items-center justify-center">
+          Ide!
+        </div>
+      </div>
+
+      <!-- Canvas példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Canvas</h2>
+        <canvas id="myCanvas" width="300" height="150" class="border"></canvas>
+      </div>
+
+      <!-- SVG példa -->
+      <div class="border p-4 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">SVG</h2>
+        <svg width="200" height="100" class="border">
+          <rect width="200" height="100" style="fill:lightblue;stroke-width:2;stroke:blue" />
+          <circle cx="100" cy="50" r="30" fill="red" />
+          <text x="50" y="55" fill="black" font-size="20">Hello SVG</text>
+        </svg>
+      </div>
+
+    </div>
+
+    <script>
+      // Web Storage
+      function saveStorage() {
+        const value = document.getElementById('storageInput').value;
+        localStorage.setItem('myData', value);
+      }
+
+      function loadStorage() {
+        const data = localStorage.getItem('myData');
+        document.getElementById('storageOutput').textContent = data ? `Mentett érték: ${data}` : 'Nincs mentett adat!';
+      }
+
+      // Web Worker
+      let worker;
+      function startWorker() {
+        if (typeof (Worker) !== "undefined") {
+          if (!worker) {
+            worker = new Worker(URL.createObjectURL(new Blob([`
+            self.onmessage = function(e) {
+              let count = 0;
+              setInterval(() => {
+                self.postMessage(count++);
+              }, 1000);
+            }
+          `], { type: 'text/javascript' })));
+          }
+          worker.postMessage("start");
+          worker.onmessage = function (event) {
+            document.getElementById('workerOutput').textContent = "Szám: " + event.data;
+          };
+        } else {
+          document.getElementById('workerOutput').textContent = "A böngésződ nem támogatja a Workereket.";
+        }
+      }
+
+      // Geolocation API
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            document.getElementById('geoOutput').textContent =
+              "Szélesség: " + position.coords.latitude +
+              ", Hosszúság: " + position.coords.longitude;
+          }, function (error) {
+            document.getElementById('geoOutput').textContent = "Hiba: " + error.message;
+          });
+        } else {
+          document.getElementById('geoOutput').textContent = "A böngésződ nem támogatja a Geolocation API-t.";
+        }
+      }
+
+      // Drag and Drop
+      const dragItem = document.getElementById('dragItem');
+      const dropZone = document.getElementById('dropZone');
+
+      dragItem.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', 'dragging');
+      });
+
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '#e0e0e0';
+      });
+
+      dropZone.addEventListener('dragleave', (e) => {
+        dropZone.style.backgroundColor = '';
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.backgroundColor = '';
+        dropZone.textContent = "Siker!";
+      });
+
+      // Canvas
+      const canvas = document.getElementById('myCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = "green";
+      ctx.fillRect(10, 10, 150, 75);
+      ctx.strokeStyle = "black";
+      ctx.strokeRect(10, 10, 150, 75);
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText("Hello Canvas", 20, 50);
+    </script>
+
+    <aside class="container my-4">
+      <div class="p-3 bg-light border rounded">
+        <h5>HTML 5 Példák</h5>
+        <p>Az előadásanyag alapján elkészített, kicsit felújított megoldások megformázva.</p>
+      </div>
+    </aside>
+  </main>
+  <!-- Footer -->
+  <footer class="text-center py-4 footer-bg">
+    <h6>Cs. Nagy Dániel - FN25MA | Farkas Bence - NEPTUN</h6>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
