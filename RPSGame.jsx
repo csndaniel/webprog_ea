@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 
-const choices = ["✊", "✋", "✌️"]; // kő, papír, olló
+const choices = ["rock", "paper", "scizzors"]; // kő, papír, olló
 
 function RPSGame({ onBack }) {
   const [playerChoice, setPlayerChoice] = useState(null);
@@ -17,9 +17,9 @@ function RPSGame({ onBack }) {
     if (choice === comp) {
       setResult("Döntetlen");
     } else if (
-      (choice === "✊" && comp === "✌️") ||
-      (choice === "✌️" && comp === "✋") ||
-      (choice === "✋" && comp === "✊")
+      (choice === "rock" && comp === "scizzorz") ||
+      (choice === "scizzors" && comp === "paper") ||
+      (choice === "paper" && comp === "rock")
     ) {
       setResult("Nyertél!");
       setScore(score + 1);
